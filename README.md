@@ -4,11 +4,11 @@ Localización, guiado y control de un robot con ROS en C++.
 La LOCALIZACIÓN del robot se hará con un filtro de partículas. Para ello, se carga un mapa virtual que debe coincidir con el real y se simulan las observaciones de las partículas.
 
 Filtro de partículas:
- 1- Primero posiciones aleatorias de x, y y angulo para crear las partículas.
- 2- Predicción de la posicion del robot y de las particulas en base a la posición y la velocidad en el instante anterior (se hace uso de una fórmula de predicción de movimiento).
- 3- Cálculo de las observaciones: mapa virtual y medidas de los láseres del robot.
- 4- Matching de las observaciones del robot con las simuladas de las partículas.
- 5- Resample de las particulas para reubicar las partículas con menor peso. La posición del robot será la media de las ubicaciones de las partículas, que deberían estar agrupadas alrededor de la posición real del robot.
+ - Primero posiciones aleatorias de x, y y angulo para crear las partículas.
+ - Predicción de la posicion del robot y de las particulas en base a la posición y la velocidad en el instante anterior (se hace uso de una fórmula de predicción de movimiento).
+ - Cálculo de las observaciones: mapa virtual y medidas de los láseres del robot.
+ - Matching de las observaciones del robot con las simuladas de las partículas.
+ - Resample de las particulas para reubicar las partículas con menor peso. La posición del robot será la media de las ubicaciones de las partículas, que deberían estar agrupadas alrededor de la posición real del robot.
 
 El GUIADO o navegación para la evasión de obstáculos se hace gracias al vector VFF. Se tiene en cuanta el target y el obstáculo que se interpone entre el robot y el target, de manera que hay un vector obstáculo y un vector target, el vector resultante será el vector VFF, de donde extraemos la velocidad angular necesaria para evadir el obstáculo. Una vez el obstáculo se va dejando atrás, es menor su vector, por lo que el vector target vuelve a ser mayor y se llega al target.
 
