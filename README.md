@@ -36,4 +36,4 @@ Para la parte de control es necesario instalar fuzzylite en usr/local/lib/:
   - sudo make install
 
 En caso de error al exportar fuzzylite-7.0.0:
- - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH=/usr/local/lib
+ - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH=/usr/local/lib/
