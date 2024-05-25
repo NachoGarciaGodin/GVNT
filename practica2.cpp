@@ -145,9 +145,9 @@ int numero=0;
 void laserCallback(const sensor_msgs::LaserScanConstPtr& scan){
     medidasLaser.clear();
     medidasLaser.insert(medidasLaser.begin(), scan->ranges.begin(), scan->ranges.end());
-    distanciaRobotObstaculo= *std::min_element(medidasLaser.begin()+90, medidasLaser.begin()+270);
-    medidasDcha= *std::min_element(medidasLaser.begin()+90, medidasLaser.begin()+180);
-    medidasIzq= *std::min_element(medidasLaser.begin()+180, medidasLaser.begin()+270);
+    distanciaRobotObstaculo= *std::min_element(medidasLaser.begin()+135, medidasLaser.begin()+225);
+    medidasDcha= *std::min_element(medidasLaser.begin()+135, medidasLaser.begin()+180);
+    medidasIzq= *std::min_element(medidasLaser.begin()+180, medidasLaser.begin()+225);
     std::cout << "Distancia del robot al obstáculo: " << distanciaRobotObstaculo << std::endl;
     std::cout << "Min izq" << medidasIzq <<std::endl;
     std::cout << "Min dcha" << medidasDcha <<std::endl;
@@ -254,11 +254,11 @@ int main (int argc, char** argv){
             //std::cout << "dist2: " << dist2 << std::endl;
             //std::cout<< "vff es:" << vff_activo << std::endl;
             //std::cout << "La distancia del robot al obstáculo es:" << distanciaRobotObstaculo << std::endl;
-            if(distanciaRobotObstaculo>4.5){
+            if(distanciaRobotObstaculo>3.5){
                 vff_activo=0;
                 //std::cout << "He desactivado el vff" << std::endl;
             }
-            if(distanciaRobotObstaculo>4.0 && vff_activo==0){ 
+            if(distanciaRobotObstaculo>3.0 && vff_activo==0){ 
                 speed.angular.z = 0.0;
                 speed.linear.x = 0.3;
                 speed_pub.publish(speed);
