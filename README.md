@@ -8,7 +8,7 @@ Filtro de partículas:
  - Predicción de la posición del robot y de las partículas en base a la posición y la velocidad en el instante anterior (se hace uso de una fórmula de predicción de movimiento).
  - Cálculo de las observaciones: mapa virtual y medidas de los láseres del robot.
  - Matching de las observaciones del robot con las simuladas de las partículas.
- - Resample de las particulas para reubicar las partículas con menor peso. La posición del robot será la media de las ubicaciones de las partículas, que deberían estar agrupadas alrededor de la posición real del robot.
+ - Resample de las partículas para reubicar las partículas con menor peso. La posición del robot será la media de las ubicaciones de las partículas, que deberían estar agrupadas alrededor de la posición real del robot.
 
 El GUIADO o navegación para la evasión de obstáculos se hace gracias al vector VFF. Se tiene en cuanta el target y el obstáculo que se interpone entre el robot y el target, de manera que hay un vector obstáculo y un vector target, el vector resultante será el vector VFF, de donde extraemos la velocidad angular necesaria para evadir el obstáculo. Una vez el obstáculo se va dejando atrás, es menor su vector, por lo que el vector target vuelve a ser mayor y se llega al target.
 
