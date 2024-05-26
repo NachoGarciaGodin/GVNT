@@ -3,6 +3,10 @@
   <obstacles>
     <obstacle name="obstacle1" x="0.5" y="17.95" width="15.5" height="5.15"/>
     <obstacle name="obstacle2" x="0.5" y="7.8" width="13.25" height="4.5"/>
+    <obstacle name="obstacle3" x="0.5" y="0.5" width="0.1" height="19.5"/>
+    <obstacle name="obstacle4" x="0.5" y="0.5" width="19.5" height="0.1"/>
+    <obstacle name="obstacle5" x="19.4" y="0.5" width="0.1" height="19.5"/>
+    <obstacle name="obstacle6" x="0.5" y="19.4" width="19.5" height="0.1"/>    
   </obstacles>
   <points>
     <!-- <point name="point1" x="20" y="10"/>

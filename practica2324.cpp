@@ -61,7 +61,7 @@ std::vector<Posicion> puntos; //= {{4,4}, {4,2}, {2,4}}; //defino los puntos a l
 
 int map_width, map_height;
 std::vector<Obstacle> obstacles;
-int num_particulas = 10;
+int num_particulas = 1000;
 std::vector<Particula*> particulas;
 
 
@@ -172,19 +172,19 @@ for (int i = 0; i < num_particulas; ++i) {
 }
 
 void odometryCallback(const nav_msgs::OdometryConstPtr& msg){
-    std::cout << "Position: {x:" << msg->pose.pose.position.x << ", y:" << msg->pose.pose.position.y << "}" << std::endl;
+    //std::cout << "Position: {x:" << msg->pose.pose.position.x << ", y:" << msg->pose.pose.position.y << "}" << std::endl;
     ubicacionActual= {msg->pose.pose.position.x, msg->pose.pose.position.y};
     yaw=tf::getYaw(msg->pose.pose.orientation);
-    std::cout << "Yaw: " << yaw << std::endl;
+    //std::cout << "Yaw: " << yaw << std::endl;
 }
 
 void laserCallback(const sensor_msgs::LaserScanConstPtr& scan){
     medidasLaser = std::vector<float>(scan->ranges.begin(), scan->ranges.end());
-    std::cout << "Medidas Laser: ";
-        for (const auto& medida : medidasLaser) {
-            std::cout << medida << " ";
-        }
-        std::cout << std::endl;
+    // std::cout << "Medidas Laser: ";
+    //     for (const auto& medida : medidasLaser) {
+    //         std::cout << medida << " ";
+    //     }
+    //     std::cout << std::endl;
 }
 
 double calcularDistancia(Posicion pos1, Posicion pos2) {
@@ -270,10 +270,67 @@ void calcularDistanciaMahalanobis() {
     for (size_t i = 0; i <num_particulas; ++i) {
         double sum = 0;
         for (int j = 0; j < 360; ++j) {
+            if (distances[i][j] > 12.06) {
+                distances[i][j] = 12.06; //valor máximo de la distancia de los láseres
+            }
+            if (medidasLaser[j] > 12.06){
+                medidasLaser[j] = 12.06;
+            }
             sum += std::pow(  distances[i][j] - medidasLaser[j], 2);
         }
         distanciaMahalanobis[i] = std::sqrt(sum/0.01); //se divide entre una varianza
     }
+}
+
+void resampleParticulas() {
+    int num_mejores = num_particulas * 0.2;
+    int num_peores = num_particulas - num_mejores;
+    std::vector<Particula*> particulasNuevas;
+    double error = 0.1; // variación en la nuevaubicación
+    // Vector de pares (distancia, índice) para ordenar las partículas
+    std::vector<std::pair<double, int>> distanciasIndices;
+    for (int i = 0; i < num_particulas; ++i) {
+        distanciasIndices.push_back(std::make_pair(distanciaMahalanobis[i], i));
+    }
+
+    std::sort(distanciasIndices.begin(), distanciasIndices.end()); // Ordenar las partículas 
+    
+    for (int i = 0; i < num_mejores; ++i) { // Copiar las partículas del 20% superior
+        int idx = distanciasIndices[i].second;
+        particulasNuevas.push_back(new Particula(*particulas[idx]));
+    }
+
+    for (int i = 0; i < num_peores; ++i) { // Reubicar el 80%
+        // Seleccionar una partícula aleatoria del 20% superior
+        int idx_mejor = distanciasIndices[std::rand() % num_mejores].second;
+        Particula* particulaMejor = particulas[idx_mejor];
+        Particula* nuevaParticula = new Particula(*particulaMejor);
+        nuevaParticula->x += error; // Añadir el error
+        nuevaParticula->y += error;
+        particulasNuevas.push_back(nuevaParticula);
+    }
+    
+    for (auto& particula : particulas) { // Liberar la memoria de las partículas antiguas
+        delete particula;
+    }
+
+    particulas = particulasNuevas; 
+}
+
+void calculoLocalizacion() {
+    double x = 0;
+    double y = 0;
+    double theta = 0;
+    for (const auto& particula : particulas) {
+        x += particula->x;
+        y += particula->y;
+        theta += particula->theta;
+    }
+    x /= num_particulas;
+    y /= num_particulas;
+    theta /= num_particulas;
+    std::cout << "Localización: {" << x << ", " << y << ", " << theta << "}" << std::endl;
+    std::cout << "Ubicación: {" << ubicacionActual.x << "," << ubicacionActual.y << "}" << std::endl;
 }
 
 int main (int argc, char** argv){
@@ -288,9 +345,9 @@ int main (int argc, char** argv){
     std::string xmlFilePath = "/home/alumno/robotica_movil_ws/src/practica1/src/map.xml";
     readXmlFile(xmlFilePath, map_width, map_height, obstacles);
     inicializarParticulasAleatorias(num_particulas, map_width, map_height, obstacles); //creo las particulas
-    for (const auto& particula : particulas) {
-        std::cout << "Particula: {" << particula->x << ", " << particula->y << ", " << particula->theta << "}" << std::endl;
-    }
+    // for (const auto& particula : particulas) {
+    //     std::cout << "Particula: {" << particula->x << ", " << particula->y << ", " << particula->theta << "}" << std::endl;
+    // }
 
     ros::Rate loop(10);//frequency
 
@@ -310,9 +367,9 @@ int main (int argc, char** argv){
         //voy calculando el  angulo y la distancia para ver que van disminuyendo
         angulo2 = calcularAngulo(ubicacionActual, dato);
         dist2 = calcularDistancia(ubicacionActual, dato);
-        std::cout << "angulo2: " << angulo2 << std::endl;
-        std::cout << "dist2: " << dist2 << std::endl;
-        std::cout << "dato: {" << dato.x << ", " << dato.y << "}" << std::endl;
+        // std::cout << "angulo2: " << angulo2 << std::endl;
+        // std::cout << "dist2: " << dist2 << std::endl;
+        // std::cout << "dato: {" << dato.x << ", " << dato.y << "}" << std::endl;
 
         geometry_msgs::Twist speed;
         
@@ -320,20 +377,29 @@ int main (int argc, char** argv){
         // for (const auto& particula : particulas) {
         // std::cout << "Particula: {" << particula->x << ", " << particula->y << ", " << particula->theta << "}" << std::endl;
         // }
+
         calculaObservaciones();   
         // Mostrar las distancias calculadas para cada particula
-        for (size_t i = 0; i < particulas.size(); ++i) {
-            std::cout << "Distancias para la partícula " << i + 1 << ":" << std::endl;
-            for (int j = 0; j < 360; ++j) {
-                std::cout << "Grado " << j << ": " << distances[i][j] << std::endl;
-            }
-            std::cout << std::endl;
-        }  
+        // for (size_t i = 0; i < particulas.size(); ++i) {
+        //     std::cout << "Distancias para la partícula " << i + 1 << ":" << std::endl;
+        //     for (int j = 0; j < 360; ++j) {
+        //         std::cout << "Grado " << j << ": " << distances[i][j] << std::endl;
+        //     }
+        //     std::cout << std::endl;
+        // }  
+        
         calcularDistanciaMahalanobis();   
         // Mostrar las distancias de Mahalanobis calculadas
-        for (size_t i = 0; i < num_particulas; ++i) {
-            std::cout << "Distancia de Mahalanobis para la partícula " << i + 1 << ": " << distanciaMahalanobis[i] << std::endl;
-        }        
+        // for (size_t i = 0; i < num_particulas; ++i) {
+        //     std::cout << "Distancia de Mahalanobis para la partícula " << i + 1 << ": " << distanciaMahalanobis[i] << std::endl;
+        // }        
+        
+        resampleParticulas();
+        // for (const auto& particula : particulas) {
+        //     std::cout << "Particula: {" << particula->x << ", " << particula->y << ", " << particula->theta << "}" << std::endl;
+        // }
+        
+        calculoLocalizacion();
 
         if ((angulo2 - yaw > 0.01) || (angulo2 - yaw < -0.01)){
             // angulo2 = calcularAngulo(ubicacionActual, dato);
