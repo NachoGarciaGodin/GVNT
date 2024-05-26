@@ -1,5 +1,5 @@
 # GVNT
-Localización, guiado y control de un robot con ROS en C++. Para ejecutar una parte u otra, simplemente cambiar el CMakeLists.txt y aádir el .cpp que se desee.
+Localización, guiado y control de un robot con ROS en C++. Para ejecutar una parte u otra, simplemente cambiar el CMakeLists.txt y añadir el .cpp que se desee.
 
 La LOCALIZACIÓN del robot se hará con un filtro de partículas. Para ello, se carga un mapa virtual que debe coincidir con el real y se simulan las observaciones de las partículas.
 
