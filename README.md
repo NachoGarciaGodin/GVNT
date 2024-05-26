@@ -1,7 +1,7 @@
 # GVNT
 Localización, guiado y control de un robot con ROS en C++. Para ejecutar una parte u otra, simplemente cambiar el CMakeLists.txt y añadir el .cpp que se desee.
 
-La LOCALIZACIÓN del robot se hará con un filtro de partículas. Para ello, se carga un mapa virtual que debe coincidir con el real y se simulan las observaciones de las partículas.
+La LOCALIZACIÓN (practica2324.cpp) del robot se hará con un filtro de partículas. Para ello, se carga un mapa virtual que debe coincidir con el real y se simulan las observaciones de las partículas.
 
 Filtro de partículas:
  - Primero posiciones aleatorias de (x, y,ángulo) para crear las partículas.
@@ -10,9 +10,9 @@ Filtro de partículas:
  - Matching de las observaciones del robot con las simuladas de las partículas.
  - Resample de las partículas para reubicar las partículas con menor peso. La posición del robot será la media de las ubicaciones de las partículas, que deberían estar agrupadas alrededor de la posición real del robot.
 
-El GUIADO o navegación para la evasión de obstáculos se hace gracias al vector VFF. Se tiene en cuanta el target y el obstáculo que se interpone entre el robot y el target, de manera que hay un vector obstáculo y un vector target, el vector resultante será el vector VFF, de donde extraemos la velocidad angular necesaria para evadir el obstáculo. Una vez el obstáculo se va dejando atrás, es menor su vector, por lo que el vector target vuelve a ser mayor y se llega al target.
+El GUIADO (practica2.cpp) o navegación para la evasión de obstáculos se hace gracias al vector VFF. Se tiene en cuanta el target y el obstáculo que se interpone entre el robot y el target, de manera que hay un vector obstáculo y un vector target, el vector resultante será el vector VFF, de donde extraemos la velocidad angular necesaria para evadir el obstáculo. Una vez el obstáculo se va dejando atrás, es menor su vector, por lo que el vector target vuelve a ser mayor y se llega al target.
 
-El CONTROL se hace con lógica difusa en un controlador que define los rangos de los triángulos o trapezoides y las velocidades lineal y angular. Recibe como parámetro la distancia al target y el error de orientación del robot respecto al target, en base a dichos parámetros y unas reglas que definen el comportamiento deseado, se establecen una velocidad angular y una velocidad lineal.
+El CONTROL (practica3.cpp y CFuzzySpeedController.cpp) se hace con lógica difusa en un controlador que define los rangos de los triángulos o trapezoides y las velocidades lineal y angular. Recibe como parámetro la distancia al target y el error de orientación del robot respecto al target, en base a dichos parámetros y unas reglas que definen el comportamiento deseado, se establecen una velocidad angular y una velocidad lineal.
 
 
 COMANDOS DE COMPILACIÓN Y EJECUCUCIÓN:
