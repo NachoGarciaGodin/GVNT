@@ -4,8 +4,8 @@ Localización, guiado y control de un robot con ROS en C++.
 La LOCALIZACIÓN del robot se hará con un filtro de partículas. Para ello, se carga un mapa virtual que debe coincidir con el real y se simulan las observaciones de las partículas.
 
 Filtro de partículas:
- - Primero posiciones aleatorias de x, y y angulo para crear las partículas.
- - Predicción de la posicion del robot y de las particulas en base a la posición y la velocidad en el instante anterior (se hace uso de una fórmula de predicción de movimiento).
+ - Primero posiciones aleatorias de x, y y ángulo para crear las partículas.
+ - Predicción de la posición del robot y de las partículas en base a la posición y la velocidad en el instante anterior (se hace uso de una fórmula de predicción de movimiento).
  - Cálculo de las observaciones: mapa virtual y medidas de los láseres del robot.
  - Matching de las observaciones del robot con las simuladas de las partículas.
  - Resample de las particulas para reubicar las partículas con menor peso. La posición del robot será la media de las ubicaciones de las partículas, que deberían estar agrupadas alrededor de la posición real del robot.
