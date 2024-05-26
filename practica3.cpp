@@ -119,8 +119,6 @@ int main (int argc, char** argv){
 
     while (ros::ok()) {
         if (coger_dato == 1) { //&& std::getline(archivo, linea)) {
-            //double x1 = std::stod(linea.substr(0, linea.find(',')));
-            //double y1 = std::stod(linea.substr(linea.find(',') + 1));
             if(cuenta == puntos.size()){
                 return 0;
             }
@@ -137,47 +135,21 @@ int main (int argc, char** argv){
 
         geometry_msgs::Twist speed;
 
-        fuzzyController.getSystemInput(dist2, angulo2, &linearVelocity, &angularVelocity);
+        fuzzyController.getSystemInput(dist2, angulo2-yaw, &linearVelocity, &angularVelocity);
+        if (abs(linearVelocity) < 0.05)
+            linearVelocity = 0;
         speed.linear.x = linearVelocity;
+        if (abs(angularVelocity) < 0.05)
+            angularVelocity = 0;
         speed.angular.z = angularVelocity;
         std::cout << "linearVelocity: " << linearVelocity << std::endl;
         std::cout << "angularVelocity: " << angularVelocity << std::endl;
         speed_pub.publish(speed);
         ros::spinOnce();
         loop.sleep();
-        if(dist2 < 0.1){
+        if(dist2 < 0.5){
             coger_dato = 1;
         }
-
-        // if ((angulo2 - yaw > 0.01) || (angulo2 - yaw < -0.01)){
-        //     // angulo2 = calcularAngulo(ubicacionActual, dato);
-        //     // std::cout << "angulo2: " << angulo2 << std::endl;
-        //     if (angulo2 - yaw > 0.01){
-        //         speed.angular.z = 0.1;
-        //     }else{
-        //         speed.angular.z = -0.1;
-        //     }
-        //     speed.linear.x = 0;
-        //     speed_pub.publish(speed);
-        //     ros::spinOnce();
-        //     loop.sleep();
-        // }
-        // else if ( (dist2 > 0.1)){ //no entro aquí hasta que esté alineado
-        //     //dist2 = calcularDistancia(ubicacionActual, dato);
-        //     //std::cout << "dist2: " << dist2 << std::endl;
-        //     speed.angular.z = 0;
-        //     speed.linear.x = 0.2;
-        //     speed_pub.publish(speed);
-        //     ros::spinOnce();
-        //     loop.sleep();
-        // }else{
-        //     coger_dato  = 1;
-        //     speed.angular.z = 0;
-        //     speed.linear.x = 0;
-        //     speed_pub.publish(speed);
-        //     ros::spinOnce();
-        //     loop.sleep();
-        // }
     }
 
     return 0;

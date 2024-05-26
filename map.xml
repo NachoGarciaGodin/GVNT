@@ -5,11 +5,11 @@
     <obstacle name="obstacle2" x="0.5" y="7.8" width="13.25" height="4.5"/>
   </obstacles>
   <points>
-    <point name="point1" x="20" y="10"/>
-    <point name="point2" x="10" y="5"/> 
-    <!-- <point name="point1" x="20" y="5"/>
+    <!-- <point name="point1" x="20" y="10"/>
+    <point name="point2" x="10" y="5"/> -->
+    <point name="point1" x="20" y="5"/>
     <point name="point2" x="18" y="10"/>
-    <point name="point3" x="25" y="15"/> -->
+    <point name="point3" x="25" y="15"/>
   </points>
 </map>
 
