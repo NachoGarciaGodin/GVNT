@@ -22,7 +22,7 @@ COMANDOS DE COMPILACIÓN Y EJECUCUCIÓN:
 
 Comentarios:
 Hay que usar atan2 para que te de el cuadrante bien, porque la tangente no es la misma, depende del cuadrante
-Del fichero txt sacamos los puntos a los que queremos movernos
+Del fichero XML sacamos los puntos a los que queremos movernos
 Primero lo orientamos y luego lo movemos la distancia que queremos
 Es un cuaterno que pasamos a euler y nos quedamos con el z
 El robot de 0 a pi y de -pi a 0 otra vez
